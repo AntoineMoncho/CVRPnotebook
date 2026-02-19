@@ -1,7 +1,7 @@
 [project]
 name = "cvrpnotebook"
 version = "0.1.0"
-description = "Add your description here"
+description = "Interactive demonstration of a capacitated vehicle routing problem (CVRP) comparing exact MILP solutions with the Clarke & Wright heuristic"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [

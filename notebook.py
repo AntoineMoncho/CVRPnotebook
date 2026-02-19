@@ -25,16 +25,24 @@ def _():
 @app.cell
 def _(mo):
     mo.md("""
-    # Capacitated Logistics Demo
+    # Capacitated Vehicle Routing Problem — Interactive Demo
 
-    This notebook illustrates a simple **logistics assignment problem**:
-    - Assign packages to vehicles
-    - Each vehicle has a limited capacity
-    - Parameters are controlled interactively
+    This notebook presents a compact and interactive demonstration of a **capacitated logistics routing problem (CVRP)**.
 
-    Two solutions are currently implemented
-    - An exact solution using a MIlP solver from the pulp package
-    - An approximate solution using the Clark and Wright heuristic
+    We consider the following setting:
+    - A set of customers, each with a demand
+    - A fleet of identical vehicles with limited capacity
+    - The objective is to serve all customers while minimizing the total travel distance
+
+    Two solution approaches are compared:
+
+    - **Exact resolution** using a Mixed-Integer Linear Programming (MILP) formulation solved with *PuLP*
+    - **Heuristic resolution** using the classical *Clarke & Wright savings algorithm*
+
+    The goal of this notebook is not performance benchmarking, but rather to illustrate:
+    - modeling choices,
+    - trade-offs between exact and heuristic methods,
+    - and qualitative differences in the resulting routes.
     """)
     return
 
@@ -42,20 +50,34 @@ def _(mo):
 @app.cell(hide_code=True)
 def _(mo):
     mo.md(r"""
-    We generate a random instance of the problem and display the customers on a grid.
-    - Customers are modelized by points on the 2D plane.
-    - Vehicles can freely navigate from customer to customer without obstacles (the graph is complete i.e. fully connected).
-    - We use the euclidean distance as a cost function associated by each node between customers.
+    ## Problem modeling and assumptions
 
-    This corresponds to a fleet of vehicles navigating on a free terrain and trying to minimize the total distance covered during the tour.
+    We generate a random CVRP instance and represent customers as points in a two-dimensional plane.
 
-    This said, the model does not have to be interpreted as a literal distance in the 2D plane:
-    - customers can live in a more complex and notes can be assigned a more complex cost function
-    - the following can be seen as a representation of customers that maps them to points in a way that matches their distance on the plane to the cost associated to each node.
+    **Model assumptions:**
+    - Customers are represented as points in \(\mathbb{R}^2\)
+    - Each customer has an associated demand
+    - Vehicles start and end at a depot
+    - All vehicles have the same capacity
+    - The transportation network is modeled as a **complete graph**
+    - Travel costs correspond to **Euclidean distances**
 
-    Even with this slight conceptual extension, such a representation is not surjective. many problem settings may not be represented by an instance of this model: for instance non-planar or simply incomplete graphs, or costs functions that are not tied to an implicit planar distance.
+    This setup can be interpreted as a fleet of vehicles moving freely on an open terrain, with the objective of minimizing total distance traveled.
 
-    Exact MilP solvers as well as the Clark and Wright heuristics are designed to handle arbitrary graphs and cost functions and the code can be easily adapted to work in this more general setting.
+    ### Interpretation and limitations
+
+    Although distances are represented geometrically, the 2D embedding should be seen as a **proxy for a generic cost matrix**:
+    - customers may represent delivery locations, warehouses, or aggregated demand points
+    - distances may encode travel time, cost, or any other symmetric metric
+
+    This representation is intentionally simple and **does not capture all real-world constraints**, such as:
+    - non-complete or directed graphs
+    - road networks
+    - time windows
+    - asymmetric or non-metric costs
+
+    Both the MILP formulation and the Clarke & Wright heuristic are, however, applicable to more general graphs and cost structures.
+    The code structure is designed so that the distance matrix can easily be replaced by any externally computed cost matrix.
     """)
     return
 
@@ -118,6 +140,17 @@ def _(grid_dimension, max_demand, min_demand, n_customers):
     fig_customers
     print(customers.get_demands())
     return (customers,)
+
+
+@app.cell
+def _(mo):
+    mo.md("""
+    ## Exact resolution using MILP
+
+    We first solve the CVRP using an exact Mixed-Integer Linear Programming formulation.
+    This approach guarantees optimality (within the solver time limit), but scales poorly with problem size.
+    """)
+    return
 
 
 @app.cell
@@ -196,6 +229,18 @@ def _(current_step, customers, visits):
     fig_milp, ax_milp = plot_routes_up_to_step(customers, visits, T=current_step.value)
     fig_milp
     return (plot_routes_up_to_step,)
+
+
+@app.cell
+def _(mo):
+    mo.md("""
+    ## Heuristic resolution using Clarke & Wright
+
+    We now solve the same instance using the Clarke & Wright savings heuristic.
+    This method is fast and widely used in practice, but it does not guarantee an optimal solution.
+    In this formulation, the number of vehicles is not strictly constrained.
+    """)
+    return
 
 
 @app.cell
