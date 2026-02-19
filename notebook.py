@@ -138,7 +138,6 @@ def _(grid_dimension, max_demand, min_demand, n_customers):
 
     fig_customers = plot_customers_scatter(n_customers.value, customers.get_positions(), customers.get_demands(), vmin_demand=min_demand.value, vmax_demand=max_demand.value, side=grid_dimension.value)
     fig_customers
-    print(customers.get_demands())
     return (customers,)
 
 
@@ -167,7 +166,6 @@ def _(mo):
         value=15,
         label="Time limit for the MILP solver (s)",
         step=0.1)
-
 
     mo.vstack([n_vehicles, time_limit])
     return n_vehicles, time_limit
@@ -215,8 +213,6 @@ def _(mo, n_vehicles, visits):
         stop = len(visits)-n_vehicles.value,
         step=1,
     )
-
-
 
     mo.vstack([current_step])
     return (current_step,)
@@ -272,8 +268,6 @@ def _(cw_visits, mo):
         stop = len(cw_visits)-n_cw_vehicles,
         step=1,
     )
-
-
 
     mo.vstack([current_cw_step])
     return (current_cw_step,)
