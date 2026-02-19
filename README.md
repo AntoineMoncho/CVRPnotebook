@@ -5,7 +5,8 @@ It is intended as a **hands-on demo** for logistics and operations research appl
 
 You can view and run the notebook directly on **Molab**:
 https://molab.marimo.io/github
-
+with:
+https://github.com/AntoineMoncho/CVRPnotebook/blob/main/notebook.py
 ---
 
 ## Features
