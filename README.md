@@ -3,9 +3,8 @@
 This repository contains an **interactive notebook** that demonstrates a Capacitated Vehicle Routing Problem (CVRP) using Python.  
 It is intended as a **hands-on demo** for logistics and operations research applications.
 
-You can view and run the notebook directly on **Molab**:
+You can view and run the notebook directly on **Molab**.
 
-[Open CVRP Notebook on Molab](https://molab.marimo.io/notebooks/nb_5FQmZTeWgoufrjebg5QVwE)
 
 ---
 
